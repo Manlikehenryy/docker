@@ -11,77 +11,83 @@ services:
         environment:
             - APP_ENV=${APP_ENV}
             - CONTAINER_ROLE=app
+            # - DB_CONNECTION=postgres
+            # - DB_HOST=postgres:dpg-clibequg1b2c73akpju0-a.oregon-postgres.render.com/ecommerce_88uu
+            # - DB_PORT=5432
+            # - DB_DATABASE=ecommerce_88uu
+            # - DB_USERNAME=ecommerce_88uu_user
+            # - DB_PASSWORD=Pp5i96ekgbuKIUZmia6Qa1oMr1HCz3aa
         working_dir: /var/www
         volumes:
             - ./:/var/www
         ports:
-            - 8000:8000
-        depends_on:
-            - database
-            - redis
+            - 80:8000
+        # depends_on:
+        #     - database
+        #     - redis
 
     # PHP Service
-    websocket:
-        build:
-            context: .
-            target: php
-            args:
-                - APP_ENV=${APP_ENV}
-        environment:
-            - APP_ENV=${APP_ENV}
-            - CONTAINER_ROLE=websocket
-        working_dir: /var/www
-        volumes:
-            - ./:/var/www
-        ports:
-            - 6001:6001
-        depends_on:
-            - database
-            - redis
+    # websocket:
+    #     build:
+    #         context: .
+    #         target: php
+    #         args:
+    #             - APP_ENV=${APP_ENV}
+    #     environment:
+    #         - APP_ENV=${APP_ENV}
+    #         - CONTAINER_ROLE=websocket
+    #     working_dir: /var/www
+    #     volumes:
+    #         - ./:/var/www
+    #     ports:
+    #         - 6001:6001
+    #     depends_on:
+    #         - database
+    #         - redis
 
     # Database Server
-    database:
-        image: mysql:8.0
-        ports:
-            -   3306:3306
-        environment:
-            - MYSQL_DATABASE=${DB_DATABASE}
-            - MYSQL_USER=${DB_USERNAME}
-            - MYSQL_PASSWORD=${DB_PASSWORD}
-            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-        volumes:
-            - db-data:/var/lib/mysql
+    # database:
+    #     image: mysql:8.0
+    #     ports:
+    #         -   3306:3306
+    #     environment:
+    #         - MYSQL_DATABASE=${DB_DATABASE}
+    #         - MYSQL_USER=${DB_USERNAME}
+    #         - MYSQL_PASSWORD=${DB_PASSWORD}
+    #         - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    #     volumes:
+    #         - db-data:/var/lib/mysql
 
     # Redis Server
-    redis:
-        image: redis:alpine
-        command: redis-server --appendonly yes --requirepass  "${REDIS_PASSWORD}"
-        ports:
-            - 6379:6379
+    # redis:
+    #     image: redis:alpine
+    #     command: redis-server --appendonly yes --requirepass  "${REDIS_PASSWORD}"
+    #     ports:
+    #         - 6379:6379
 
     # Queue Server
-    queue:
-        build:
-            context: .
-            target: php
-            args:
-                - APP_ENV=${APP_ENV}
-        environment:
-            - APP_ENV=${APP_ENV}
-            - CONTAINER_ROLE=queue
-        working_dir: /var/www
-        volumes:
-            - ./:/var/www
+    # queue:
+    #     build:
+    #         context: .
+    #         target: php
+    #         args:
+    #             - APP_ENV=${APP_ENV}
+    #     environment:
+    #         - APP_ENV=${APP_ENV}
+    #         - CONTAINER_ROLE=queue
+    #     working_dir: /var/www
+    #     volumes:
+    #         - ./:/var/www
 
     # Node Server
-    node:
-        build:
-            context: .
-            target: node
-        volumes:
-            - .:/usr/src
-            - ./node_modules:/usr/src/node_modules
-        tty: true
+    # node:
+    #     build:
+    #         context: .
+    #         target: node
+    #     volumes:
+    #         - .:/usr/src
+    #         - ./node_modules:/usr/src/node_modules
+    #     tty: true
 
 volumes:
     db-data: ~
